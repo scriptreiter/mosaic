@@ -16,21 +16,21 @@ class TestImageAnalysisController < ApplicationController
 		@colors = []
 		@temp = Benchmark.realtime do
 			@colors[0] = []
-			#@colors[1] = []
-			#@colors[2] = []
-			#@colors[3] = []
-			#@colors[4] = []
-			#@colors[5] = []
+			@colors[1] = []
+			@colors[2] = []
+			@colors[3] = []
+			@colors[4] = []
+			@colors[5] = []
 			for i in (0...100)
 				img = response["photos"]["photo"][i]
 				img_url = "http://farm#{img['farm']}.staticflickr.com/#{img['server']}/#{img['id']}_#{img['secret']}_s.jpg"
 				@urls << img_url
 				@colors[0] << analyzeImage(img_url)
-				#@colors[1] << analyzeCommon(img_url)
-				#@colors[2] << analyzeImageMagick(img_url)
-				#@colors[3] << analyzeThumbnail(img_url)
-				#@colors[4] << analyzeThumbnailSlow(img_url)
-				#@colors[5] << analyzeThumbnailFast(img_url)
+				@colors[1] << analyzeCommon(img_url)
+				@colors[2] << analyzeImageMagick(img_url)
+				@colors[3] << analyzeThumbnail(img_url)
+				@colors[4] << analyzeThumbnailSlow(img_url)
+				@colors[5] << analyzeThumbnailFast(img_url)
 
 
 			end
