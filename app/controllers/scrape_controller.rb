@@ -26,9 +26,15 @@ class ScrapeController < ApplicationController
 	for i in (0...100)
 		img = response["photos"]["photo"][i]
 		img_url = "http://farm#{img['farm']}.staticflickr.com/#{img['server']}/#{img['id']}_#{img['secret']}_s.jpg"
+		color = analyzeImage(img_url)
+
+		@Image = Images.new
+		@Image.color = color
+		@Image.url = img_url
+		@Image.save
 		
 		@urls << img_url
-		@colors << analyzeImage(img_url)
+		@colors << ("#" << color)
 	end
   end
   def analyzeImage(file)
@@ -49,6 +55,6 @@ class ScrapeController < ApplicationController
 
 	average = [total[0] / img.rows, total[1] / img.rows, total[2] / img.rows]
 	
-	return "#" << average[0].to_i.to_s(16).rjust(2,'0') << average[1].to_i.to_s(16).rjust(2,'0') << average[2].to_i.to_s(16).rjust(2,'0')
+	return "" << average[0].to_i.to_s(16).rjust(2,'0') << average[1].to_i.to_s(16).rjust(2,'0') << average[2].to_i.to_s(16).rjust(2,'0')
   end
 end
