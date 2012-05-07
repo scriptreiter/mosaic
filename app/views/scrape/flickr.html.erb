@@ -1,0 +1,11 @@
+<h1>Scrape Flickr</h1>
+<p>
+	<%=
+		html = ""
+		@colors.each_index do |i|
+			html << "<div style='width:75px;height:150px;background:#{@colors[i]};float:left;'><img src='#{@urls[i]}' /></div>"
+		 end
+		html.html_safe
+
+	%>
+</p>

@@ -1,0 +1,12 @@
+<h1>TestImageAnalysis#test</h1>
+<p><%= @colors[0].each_index do |i|
+							 @test << "<div style='width:750px;height:150px;'><img src='#{@urls[i]}' /><div style='background:#{@colors[0][i]};width:75px;height:75px;float:left;'></div><div style='background:#{@colors[1][i]};width:75px;height:75px;float:left;'></div><div style='background:#{@colors[2][i]};width:75px;height:75px;float:left;'></div>
+							 <div style='background:#{@colors[3][i]};width:75px;height:75px;float:left;'></div>
+							 <div style='background:#{@colors[4][i]};width:75px;height:75px;float:left;'></div>
+							 <div style='background:#{@colors[5][i]};width:75px;height:75px;float:left;'></div>
+							 </div>"
+			 end
+			@test << " #{@temp}"
+			@test.html_safe
+
+				%></p>

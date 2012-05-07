@@ -1,0 +1,2 @@
+module TestImageAnalysisHelper
+end
