@@ -42,6 +42,7 @@ class FlickrRequest
 				puts "Duplicate..."
 			end
 		end
+		puts Images.count
 	end
 
 	def getAnalyzedColors
