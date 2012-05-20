@@ -1,12 +1,12 @@
 require 'RMagick'
 require 'json'
 require 'net/http'
-require 'benchmark'
+#require 'benchmark'
 include Magick
 
 class ScrapeController < ApplicationController
   def flickr
-  	request = FlickrRequest.new("flickr.photos.getRecent")
+  	request = ScrapeHelper::FlickrRequest.new("flickr.photos.getRecent")
   	request.send
   	request.process
 

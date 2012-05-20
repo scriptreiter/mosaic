@@ -1,4 +1,6 @@
 Mosaic::Application.routes.draw do
+  get "mosaic/create"
+
   get "scrape/flickr"
 
   get "test_image_analysis/test"
