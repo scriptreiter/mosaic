@@ -28,11 +28,11 @@ module MosaicHelper
 
 			#while(!img)
 				choice = hexFromRGB(color[0], color[1], color[2])
-				img = Images.where(:color => choice).limit(1)
+				img = Colors.find_by_id(choice.hex)#Eager loading... Not sure if necessary. Test at some point?
 
 			#end
-			if(img.exists?)
-				return img[0].url
+			if(img != nil)
+				return img.url
 			end
 			
 			return choice

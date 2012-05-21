@@ -31,11 +31,11 @@ module ScrapeHelper
 
 
 				#Add to database
-				@Image = Images.new
-				@Image.color = color
-				@Image.url = img_url
+				@Color = Colors.new
+				@Color.id = color
+				@Color.url = img_url
 
-				if(@Image.save)
+				if(@Color.save)
 					@urls << img_url
 					@colors << color
 				else
@@ -45,10 +45,10 @@ module ScrapeHelper
 			
 			File.open("#{Rails.root}/log/test.log", "a") do |f|
 				f.write(((500 - duplicates) / 5).to_s << "%\n")
-				f.write(Images.count.to_s << "\n")
+				f.write(Colors.count.to_s << "\n")
 			end
 			puts ((500 - duplicates) / 5).to_s << "%"
-			puts Images.count
+			puts Colors.count
 		end
 
 		def getAnalyzedColors
