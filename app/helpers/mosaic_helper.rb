@@ -1,18 +1,15 @@
 module MosaicHelper
-	require 'RMagick'
-	include Magick
-	require 'images'
 
 	class Mosaic
 		def initialize(path)
-
-			puts "Initializing..."
+			logStatus("Initializing...")
 			@img = ImageList.new(path)
 			@pixels = []
+			logStatus("Initialized.")
 		end
 
 		def findImages
-			puts "Finding images..."
+			logStatus("Finding images...")
 			for row in (0...@img.rows)
 				@pixels << []
 
@@ -20,6 +17,7 @@ module MosaicHelper
 					@pixels[row][col] = findColor(@img.pixel_color(col, row))
 				end
 			end
+			logStatus("Images Found")
 		end
 
 		def findColor(px)
@@ -47,19 +45,24 @@ module MosaicHelper
 		end
 
 		def display
-			puts "About to display..."
 			display = "<div style=\"width:750px;height:750px;\">"
 			for row in (0...@img.rows)
 				for col in (0...@img.columns)
 					px = @pixels[row][col]
 					if(px.index('http') != nil)
-						display << "<img src=\"#{px}\" width=\"10\" height=\"10\" />"
+						display << "<img src=\"#{px}\" width=\"10\" height=\"10\" style=\"float:left\" />"
 					else
 						display << "<div style=\"background:\##{px};width:10px;height:10px;float:left;\"></div>"
 					end		
 				end
 			end
 			return display << "</div>"
+		end
+
+		def logStatus(status)
+			File.open("#{Rails.root}/log/create.log", "a") do |f|
+				f.puts(status)
+			end
 		end
 	end
 end
