@@ -6,4 +6,9 @@ class MosaicControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test "should get portal" do
+    get :portal
+    assert_response :success
+  end
+
 end

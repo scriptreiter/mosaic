@@ -2,8 +2,12 @@ module ScrapeHelper
 
 	class FlickrRequest
 		def initialize(src)
-			params = "api_key=d9887d18d9d02626a29194fb14dd8acc&method=#{src}&format=json&nojsoncallback=1&per_page=500"
+			max_upload = 1.week.ago.to_i
+			min_upload = 2.weeks.ago.to_i
+			params = "api_key=d9887d18d9d02626a29194fb14dd8acc&method=#{src}&format=json&nojsoncallback=1&per_page=500&max_upload_date=#{max_upload}&min_upload_date=#{min_upload}"
+			#params = "method=#{src}&api_key=d9887d18d9d02626a29194fb14dd8acc&min_upload_date=1336038244&max_upload_date=1337038244&per_page=500&format=json&nojsoncallback=1"
 			@url = "http://api.flickr.com/services/rest/?#{params}"
+			puts @url
 		end
 
 		def send
@@ -32,7 +36,7 @@ module ScrapeHelper
 
 				#Add to database
 				@Color = Colors.new
-				@Color.id = color
+				@Color.id = color.hex
 				@Color.url = img_url
 
 				if(@Color.save)

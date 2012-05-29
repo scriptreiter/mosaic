@@ -2,14 +2,14 @@ module MosaicHelper
 
 	class Mosaic
 		def initialize(path)
-			logStatus("Initializing...")
+			#logStatus("Initializing...")
 			@img = ImageList.new(path)
 			@pixels = []
-			logStatus("Initialized.")
+			#logStatus("Initialized.")
 		end
 
 		def findImages
-			logStatus("Finding images...")
+			#logStatus("Finding images...")
 			for row in (0...@img.rows)
 				@pixels << []
 
@@ -17,7 +17,7 @@ module MosaicHelper
 					@pixels[row][col] = findColor(@img.pixel_color(col, row))
 				end
 			end
-			logStatus("Images Found")
+			#logStatus("Images Found")
 		end
 
 		def findColor(px)
@@ -26,18 +26,52 @@ module MosaicHelper
 			img = false
 			i = 0
 
-			#while(!img)
-				choice = hexFromRGB(color[0], color[1], color[2])
-				img = Colors.find_by_id(choice.hex)#Eager loading... Not sure if necessary. Test at some point?
+			choice = hexFromRGB(color[0], color[1], color[2])
+			img = Colors.find_by_id(choice.hex)#Eager loading... Not sure if necessary. Test at some point?
 
-			#end
 			if(img != nil)
 				return img.url
 			end
 			
-			return choice
+			return closestColor(color[0], color[1], color[2])
 
 			#return "http://farm6.staticflickr.com/5460/7165890216_80dd2e2df8_s.jpg"#img.url
+		end
+
+		def closestColor(r, g, b)
+			puts r.to_s << g.to_s << b.to_s
+			range = (-3..3)
+			matches = []
+			for dr in range
+				for dg in range
+					for db in range
+						test = hexFromRGB(r + dr, g + dg, b + db)
+						img = Colors.find_by_id(test.hex)
+
+						if(img != nil)
+							matches << img
+						end
+					end
+				end
+			end
+
+			min = 76#max distance is range**2 * 3, then add 1
+			minUrl = hexFromRGB(r, g, b)
+			for match in matches
+				color = splitRGBFromHex(match.id)
+				distSq = (r - color[0])**2 + (g - color[1])**2 + (b - color[2])**2
+				if(min > distSq)
+					min = distSq
+					minUrl = match.url
+				end
+			end
+
+			return minUrl
+		end
+
+		def splitRGBFromHex(color)
+			color = color.to_s(16).rjust(6,'0')
+			return [color[0,2].hex, color[2,2].hex, color[4,2].hex]
 		end
 
 		def hexFromRGB(r, g, b)
@@ -45,7 +79,9 @@ module MosaicHelper
 		end
 
 		def display
-			display = "<div style=\"width:750px;height:750px;\">"
+			width = @img.columns * 10
+			height = @img.rows * 10
+			display = "<div style=\"width:#{width}px;height:#{height}px;\">"
 			for row in (0...@img.rows)
 				for col in (0...@img.columns)
 					px = @pixels[row][col]

@@ -1,5 +1,7 @@
 Mosaic::Application.routes.draw do
-  get "mosaic/create"
+  post "mosaic/create"
+
+  get "mosaic/portal"
 
   get "scrape/flickr"
 
