@@ -5,6 +5,7 @@ module MosaicHelper
 			#logStatus("Initializing...")
 			@img = ImageList.new(path)
 			@pixels = []
+			@cache = {}
 			#logStatus("Initialized.")
 		end
 
@@ -27,14 +28,22 @@ module MosaicHelper
 			i = 0
 
 			choice = hexFromRGB(color[0], color[1], color[2])
-			img = Colors.find_by_id(choice.hex)#Eager loading... Not sure if necessary. Test at some point?
 
-			if(img != nil)
-				return img.url
+			if(@cache.has_key?(choice))
+				cache = @cache[choice]
+			else
+				img = Colors.find_by_id(choice.hex)#Eager loading... Not sure if necessary. Test at some point?
+
+				if(img != nil)
+					cache = img.url
+				else
+					cache = closestColor(color[0], color[1], color[2])
+				end
+
+				@cache[choice] = cache
 			end
 			
-			return closestColor(color[0], color[1], color[2])
-
+			return cache
 			#return "http://farm6.staticflickr.com/5460/7165890216_80dd2e2df8_s.jpg"#img.url
 		end
 
